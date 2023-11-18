@@ -22,7 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
       
 });
 
-Route::middleware('auth:sanctum')->group(function (){});
+Route::middleware('auth:sanctum')->group(function (){
+    
+});
 
     // route patients dgn method GET & action INDEX
     // action route for get all resource
@@ -41,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function (){});
 
     // route patients dgn method DELETE & action DELETE
     // action route for delete resource
-    Route::delete('/patients/{id}', [PatientController::class, 'delete']);
+    Route::delete('/patients/{id}', [PatientController::class, 'destroy']);
 
     // route patients dgn method GET & action SEARCH
     // action route for get search resource by name
