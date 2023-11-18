@@ -10,9 +10,9 @@ class Status extends Model
 {
     // satu status punya banyak pasien  
     // method pasien buat relasi one to many ke class Status
-    public function pasien(): HasMany{
-        return $this->hasMany(Pasien::class);
-    }
-    
+    // public function pasien(): HasMany{
+    //     return $this->hasMany(Pasien::class);
+    // }
+
     use HasFactory;
 }

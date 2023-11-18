@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('rekam_medis', function (Blueprint $table) {
             $table->id();
-            $table->date('in_date_at');
-            $table->date('out_date_at');
+            // $table->date('in_date_at');
+            // $table->date('out_date_at');
             $table->timestamps();
         });
     }

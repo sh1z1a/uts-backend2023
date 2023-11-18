@@ -43,6 +43,8 @@ class PatientController extends Controller
                 "message" => "Data not found",
                 "data" => []
             ];
+
+            // mengembalikan data (json) dan kode 404
             return response()->json($data, 404);
         }
     }
@@ -55,9 +57,7 @@ class PatientController extends Controller
         
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // membuat method store untuk menambah data
     public function store(Request $request, Patient $patients)
     {
         
@@ -66,6 +66,9 @@ class PatientController extends Controller
             'name'=>'required',
             'phone'=>'numeric|required',
             'address'=>'required',
+            'in_date_at'=>'required',
+            'out_date_at'=>'required',
+            'status'=>'required',
         ]);
 
         // menggunakan model Patient untuk insert data
@@ -101,18 +104,40 @@ class PatientController extends Controller
                 "message" => "Resources not found",
                 "data" => []
             ];
+
+            // mengembalikan data (json) dan kode 404
             return response()->json($data, 404);
         }
        
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, Patient $patients)
+    // membuat method show untuk menampilkan data
+    public function show(Request $request, Patient $patients, $id)
     {
+        //  cari id patients yang ingin didapatkan 
+        $patients = Patient::where($id);
+
+        if($patients){
+            $data = [
+                'message'=> 'Get detail resource',
+                'data' => $patients
+            ];
+
+            // mengembalikan data(json) dan kode 200
+            return response()->json($data, 200);
+        }
+        else{
+            $data = [
+                'message' => 'Rsource not found',
+            ];
+
+            // mengembalikan data (json) dan kode 404
+            return response()->json($data, 404);
+        }
 
     }
+
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -120,13 +145,22 @@ class PatientController extends Controller
     public function edit(Request $request, Patient $patients)
     {
         
-        // menghandle data yang tidak ada
+     
+    }
+
+    // membuat method update untuk mengubah/mengupdate data
+    public function update(Request $request, Patient $patients )
+    {
+       // menghandle data yang tidak ada
         if($patients){
             // menangkap data request
             $input = [
                 'name' => $request-> name ?? $patients->name,
                 'phone' => $request -> phone ?? $patients->phone,
                 'address' => $request -> address ?? $patients->address,
+                'in_date_at'=>$request-> in_date_at ?? $patients->in_date_at,
+                'out_date_at'=>$request-> out_date_at ?? $patients->out_date_at,
+                'status'=>$request-> status ?? $patients->status
             ];
 
             // temukan resources pasien
@@ -137,7 +171,7 @@ class PatientController extends Controller
 
             // tampilkan response
             $data = [
-                'message' => 'Resources is updated successfully',
+                'message' => 'Resource is updated successfully',
                 'data' => $patients
             ];
 
@@ -146,26 +180,76 @@ class PatientController extends Controller
         }
         else {
             $data = [
-                'message' => 'Resources not found'
+                'message' => 'Resource not found'
             ];
 
+            // mengembalikan data (json) dan kode 404
             return response()->json($data, 404);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    // membuat method destroy untuk menghapus data
     public function destroy(string $id)
     {
-        //
+        $patients = Patient::find($id);
+
+        // menghandle data yg tidak ada
+        if($patients){
+            // hapus data patient tersebut
+            $patients->delete();
+
+            // buat tampilkan data message
+            $data = [
+                'message' => 'Resource is delete successfully'
+            ];
+
+            // mengembalikan data (json) dan kode 200
+            return response()->json($data, 200);
+        }
+
+        // jika resource tidak ada
+        else {
+            // tampilkan pesan resource 
+            $data = [
+                'message' => 'Resource not found',
+                'data'=> $patients
+            ];
+
+            // mengembalikan data (json) dan kode 404
+            return response()->json($data, 404);
+        }
     }
+
+    // 
+
+    public function getPositiveResource(Request $request, Patient $patients)
+    {
+        $total = Patient::where('status', 'positive')->count();
+        $data = Patient::where('status', 'positive')->get();
+        
+        if($patients) {
+
+            // buat tampilkan data message
+            $data = [
+                'total' => $total,
+                'message' => 'Get positive resource',
+                'data' => $patients
+            ];
+
+            // mengembalikan data (json) dan kode 200
+            return response()->json($data, 200);
+        } 
+        else {
+            // tampilkan pesan resource not found
+            $data = [
+                'message' => 'Resource not found'
+            ];
+
+            // mengembalikan data (json) dan kode 404
+            return response()->json($data, 404); 
+
+        }
+        
+    }
+
 }

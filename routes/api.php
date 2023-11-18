@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\PatientController;
-use App\Models\Status;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-    
+      
+});
+
+Route::middleware('auth:sanctum')->group(function (){});
+
     // route patients dgn method GET & action INDEX
     // action route for get all resource
     Route::get('/patients', [PatientController::class, 'index']);
@@ -45,19 +49,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
     // route patients dgn method GET & action POSITIVE
     // action route for get positive resource
-    Route::get('/patients/status/positive', [StatusController::class, 'positive']);
+    Route::get('/patients/status/positive', [PatientController::class, 'positive']);
 
     // route patients dgn method GET & action RECOVERED
     // action route for get recovered resource
-    Route::get('/patients/status/recovered', [StatusController::class, 'recovered']);
+    Route::get('/patients/status/recovered', [PatientController::class, 'recovered']);
 
     // route patients dgn method GET & action DEAD
     // action route for get dead resource
-    Route::get('/patients/status/dead', [StatusController::class, 'dead']);
-
-});
+    Route::get('/patients/status/dead', [PatientController::class, 'dead']);
 
 
+
+   
 // Authentikasi register & login
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
